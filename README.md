@@ -10,12 +10,26 @@ if playerGui:FindFirstChild("IngeniousScriptDupeGUI") then
     playerGui.IngeniousScriptDupeGUI:Destroy()
 end
 
--- Função helper para corners
 local function addUICorner(parent, radius)
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(0, radius)
     corner.Parent = parent
     return corner
+end
+
+local function createTextLabel(props)
+    local label = Instance.new("TextLabel")
+    for k,v in pairs(props) do label[k] = v end
+    label.Parent = Frame
+    return label
+end
+
+local function createButton(props)
+    local btn = Instance.new("TextButton")
+    for k,v in pairs(props) do btn[k] = v end
+    addUICorner(btn, 14)
+    btn.Parent = Frame
+    return btn
 end
 
 -- Criar GUI principal
@@ -26,8 +40,8 @@ ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 ScreenGui.Parent = playerGui
 
 local Frame = Instance.new("Frame")
-Frame.Size = UDim2.new(0, 350, 0, 360)
-Frame.Position = UDim2.new(0.35, 0, 0.3, 0)
+Frame.Size = UDim2.new(0, 380, 0, 430)
+Frame.Position = UDim2.new(0.32, 0, 0.25, 0)
 Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 Frame.BorderSizePixel = 0
 Frame.Active = true
@@ -35,7 +49,6 @@ Frame.Draggable = true
 Frame.Parent = ScreenGui
 addUICorner(Frame, 20)
 
--- Título macabro
 local Title = Instance.new("TextLabel")
 Title.Size = UDim2.new(0.9, 0, 0.12, 0)
 Title.Position = UDim2.new(0.05, 0, 0.02, 0)
@@ -50,10 +63,9 @@ Title.BorderSizePixel = 0
 Title.Parent = Frame
 addUICorner(Title, 16)
 
--- Texto rodapé
 local Footer = Instance.new("TextLabel")
 Footer.Size = UDim2.new(0.9, 0, 0.07, 0)
-Footer.Position = UDim2.new(0.05, 0, 0.9, 0)
+Footer.Position = UDim2.new(0.05, 0, 0.93, 0)
 Footer.BackgroundTransparency = 1
 Footer.Text = "Keep it dark and deadly..."
 Footer.TextColor3 = Color3.fromRGB(200, 0, 0)
@@ -63,18 +75,28 @@ Footer.TextStrokeTransparency = 0.6
 Footer.BorderSizePixel = 0
 Footer.Parent = Frame
 
--- Botão duplicar
-local ButtonDupe = Instance.new("TextButton")
-ButtonDupe.Size = UDim2.new(0.9, 0, 0.15, 0)
-ButtonDupe.Position = UDim2.new(0.05, 0, 0.15, 0)
-ButtonDupe.BackgroundColor3 = Color3.fromRGB(30, 0, 0)
-ButtonDupe.TextColor3 = Color3.fromRGB(255, 20, 20)
-ButtonDupe.Font = Enum.Font.GothamBold
-ButtonDupe.TextSize = 26
-ButtonDupe.Text = "💀 DUPLICAR ITEM NA MÃO 💀"
-ButtonDupe.BorderSizePixel = 0
-ButtonDupe.Parent = Frame
-addUICorner(ButtonDupe, 16)
+-- Status label
+local StatusLabel = Instance.new("TextLabel")
+StatusLabel.Size = UDim2.new(0.9, 0, 0.08, 0)
+StatusLabel.Position = UDim2.new(0.05, 0, 0.83, 0)
+StatusLabel.BackgroundTransparency = 1
+StatusLabel.Font = Enum.Font.GothamBold
+StatusLabel.TextSize = 20
+StatusLabel.TextColor3 = Color3.fromRGB(255, 100, 100)
+StatusLabel.Text = "ESP, Voo e Invisibilidade desativados"
+StatusLabel.Parent = Frame
+
+-- Botão duplicar item
+local ButtonDupe = createButton({
+    Size = UDim2.new(0.9, 0, 0.12, 0),
+    Position = UDim2.new(0.05, 0, 0.15, 0),
+    BackgroundColor3 = Color3.fromRGB(30, 0, 0),
+    TextColor3 = Color3.fromRGB(255, 20, 20),
+    Font = Enum.Font.GothamBold,
+    TextSize = 26,
+    Text = "💀 DUPLICAR ITEM NA MÃO 💀",
+    BorderSizePixel = 0,
+})
 
 local function setDupeButtonText(text, color)
     ButtonDupe.Text = text
@@ -118,17 +140,6 @@ ButtonDupe.MouseButton1Click:Connect(function()
         setDupeButtonText("✖️ SEM ITEM NA MÃO!", Color3.fromRGB(180, 0, 0))
     end
 end)
-
--- Status texto
-local StatusLabel = Instance.new("TextLabel")
-StatusLabel.Size = UDim2.new(0.9, 0, 0.1, 0)
-StatusLabel.Position = UDim2.new(0.05, 0, 0.75, 0)
-StatusLabel.BackgroundTransparency = 1
-StatusLabel.Font = Enum.Font.GothamBold
-StatusLabel.TextSize = 20
-StatusLabel.TextColor3 = Color3.fromRGB(255, 100, 100)
-StatusLabel.Text = "ESP e Voo desativados"
-StatusLabel.Parent = Frame
 
 -- ESP
 local ESPEnabled = false
@@ -174,18 +185,16 @@ local function toggleESP()
     end
 end
 
--- Botão ESP
-local ESPButton = Instance.new("TextButton")
-ESPButton.Size = UDim2.new(0.9, 0, 0.13, 0)
-ESPButton.Position = UDim2.new(0.05, 0, 0.35, 0)
-ESPButton.BackgroundColor3 = Color3.fromRGB(40, 0, 0)
-ESPButton.TextColor3 = Color3.fromRGB(255, 0, 0)
-ESPButton.Font = Enum.Font.GothamBold
-ESPButton.TextSize = 24
-ESPButton.Text = "🧟‍♂️ ESP: OFF"
-ESPButton.BorderSizePixel = 0
-ESPButton.Parent = Frame
-addUICorner(ESPButton, 14)
+local ESPButton = createButton({
+    Size = UDim2.new(0.9, 0, 0.1, 0),
+    Position = UDim2.new(0.05, 0, 0.28, 0),
+    BackgroundColor3 = Color3.fromRGB(40, 0, 0),
+    TextColor3 = Color3.fromRGB(255, 0, 0),
+    Font = Enum.Font.GothamBold,
+    TextSize = 22,
+    Text = "🧟‍♂️ ESP: OFF",
+    BorderSizePixel = 0,
+})
 
 ESPButton.MouseButton1Click:Connect(function()
     toggleESP()
@@ -267,18 +276,16 @@ local function stopFly()
     end
 end
 
--- Botão Voo
-local FlyButton = Instance.new("TextButton")
-FlyButton.Size = UDim2.new(0.9, 0, 0.13, 0)
-FlyButton.Position = UDim2.new(0.05, 0, 0.5, 0)
-FlyButton.BackgroundColor3 = Color3.fromRGB(40, 0, 0)
-FlyButton.TextColor3 = Color3.fromRGB(255, 0, 0)
-FlyButton.Font = Enum.Font.GothamBold
-FlyButton.TextSize = 24
-FlyButton.Text = "🦇 VOAR: OFF"
-FlyButton.BorderSizePixel = 0
-FlyButton.Parent = Frame
-addUICorner(FlyButton, 14)
+local FlyButton = createButton({
+    Size = UDim2.new(0.9, 0, 0.1, 0),
+    Position = UDim2.new(0.05, 0, 0.40, 0),
+    BackgroundColor3 = Color3.fromRGB(40, 0, 0),
+    TextColor3 = Color3.fromRGB(255, 0, 0),
+    Font = Enum.Font.GothamBold,
+    TextSize = 22,
+    Text = "🦇 VOAR: OFF",
+    BorderSizePixel = 0,
+})
 
 FlyButton.MouseButton1Click:Connect(function()
     if FlyEnabled then
@@ -294,6 +301,107 @@ FlyButton.MouseButton1Click:Connect(function()
         StatusLabel.Text = "Voo ativado - Use WASD, Espaço e Ctrl"
         startFly()
     end
+end)
+
+-- Invisibilidade
+local Invisible = false
+
+local function setInvisibility(state)
+    local character = player.Character
+    if not character then return end
+    for _, part in pairs(character:GetChildren()) do
+        if part:IsA("BasePart") or part:IsA("Decal") or part:IsA("Texture") then
+            if state then
+                part.Transparency = 1
+                if part:IsA("Decal") or part:IsA("Texture") then
+                    part.Transparency = 1
+                end
+            else
+                part.Transparency = 0
+                if part:IsA("Decal") or part:IsA("Texture") then
+                    part.Transparency = 0
+                end
+            end
+        elseif part:IsA("Accessory") then
+            if part.Handle then
+                part.Handle.Transparency = state and 1 or 0
+            end
+        end
+    end
+end
+
+local InvisButton = createButton({
+    Size = UDim2.new(0.9, 0, 0.1, 0),
+    Position = UDim2.new(0.05, 0, 0.52, 0),
+    BackgroundColor3 = Color3.fromRGB(40, 0, 0),
+    TextColor3 = Color3.fromRGB(255, 0, 0),
+    Font = Enum.Font.GothamBold,
+    TextSize = 22,
+    Text = "🕵️‍♂️ INVISIBILIDADE: OFF",
+    BorderSizePixel = 0,
+})
+
+InvisButton.MouseButton1Click:Connect(function()
+    Invisible = not Invisible
+    setInvisibility(Invisible)
+    if Invisible then
+        InvisButton.Text = "🕵️‍♂️ INVISIBILIDADE: ON"
+        InvisButton.TextColor3 = Color3.fromRGB(0, 255, 0)
+        StatusLabel.Text = "Invisibilidade ativada"
+    else
+        InvisButton.Text = "🕵️‍♂️ INVISIBILIDADE: OFF"
+        InvisButton.TextColor3 = Color3.fromRGB(255, 0, 0)
+        StatusLabel.Text = "Invisibilidade desativada"
+    end
+end)
+
+-- Teleport para player
+local TpInputBox = Instance.new("TextBox")
+TpInputBox.Size = UDim2.new(0.6, 0, 0.07, 0)
+TpInputBox.Position = UDim2.new(0.05, 0, 0.65, 0)
+TpInputBox.PlaceholderText = "Nome do player para TP"
+TpInputBox.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+TpInputBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+TpInputBox.Font = Enum.Font.Gotham
+TpInputBox.TextSize = 20
+TpInputBox.BorderSizePixel = 0
+TpInputBox.Parent = Frame
+addUICorner(TpInputBox, 14)
+
+local TpButton = createButton({
+    Size = UDim2.new(0.3, 0, 0.07, 0),
+    Position = UDim2.new(0.67, 0, 0.65, 0),
+    BackgroundColor3 = Color3.fromRGB(30, 0, 0),
+    TextColor3 = Color3.fromRGB(255, 0, 0),
+    Font = Enum.Font.GothamBold,
+    TextSize = 20,
+    Text = "📍 TELEPORTAR",
+    BorderSizePixel = 0,
+})
+
+TpButton.MouseButton1Click:Connect(function()
+    local targetName = TpInputBox.Text
+    if targetName == "" then
+        StatusLabel.Text = "Digite um nome válido!"
+        return
+    end
+    local targetPlayer = Players:FindFirstChild(targetName)
+    if not targetPlayer then
+        StatusLabel.Text = "Jogador não encontrado!"
+        return
+    end
+    local char = player.Character
+    local targetChar = targetPlayer.Character
+    if not char or not char:FindFirstChild("HumanoidRootPart") then
+        StatusLabel.Text = "Seu personagem não está pronto!"
+        return
+    end
+    if not targetChar or not targetChar:FindFirstChild("HumanoidRootPart") then
+        StatusLabel.Text = "Personagem do alvo não está pronto!"
+        return
+    end
+    char.HumanoidRootPart.CFrame = targetChar.HumanoidRootPart.CFrame + Vector3.new(0,5,0)
+    StatusLabel.Text = "Teleportado para "..targetName
 end)
 
 ]])()
